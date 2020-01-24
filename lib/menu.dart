@@ -1,6 +1,7 @@
-import 'package:audioplayers/audio_cache.dart';
 import 'package:flutter/material.dart';
+import 'package:millionaire/game.dart';
 import 'package:millionaire/utils/soundUtils.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Menu extends StatefulWidget {
   @override
@@ -14,15 +15,14 @@ class _MenuState extends State<Menu> with TickerProviderStateMixin {
   @override
   void initState() {
     rotationController =
-        AnimationController(duration: const Duration(seconds: 6), vsync: this);
-    rotationController.forward();
+        AnimationController(duration: const Duration(seconds: 8), vsync: this);
     opacityController =
-        AnimationController(duration: const Duration(seconds: 3), vsync: this);
-    opacityController.forward();
+        AnimationController(duration: const Duration(seconds: 5), vsync: this);
+
     SoundUtils.playSound(Sounds.appstart);
 
-AudioCache audioCache = AudioCache();
-    audioCache.play(Sounds.appstart);
+    opacityController.forward();
+    rotationController.forward();
 
     super.initState();
   }
@@ -30,7 +30,21 @@ AudioCache audioCache = AudioCache();
   @override
   void dispose() {
     rotationController.dispose();
+    opacityController.dispose();
     super.dispose();
+  }
+
+  void _openKaindorfWebsite() async {
+    const url = 'http://www.htl-kaindorf.at';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  void _startGame() {
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Game(answeredQuestions: 0, correctQuestions: 0,)));
   }
 
   @override
@@ -39,7 +53,7 @@ AudioCache audioCache = AudioCache();
       body: Stack(
         children: <Widget>[
           Center(
-            child: new Image.asset(
+            child: Image.asset(
               'assets/background.png',
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
@@ -56,7 +70,8 @@ AudioCache audioCache = AudioCache();
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       FadeTransition(
-                          opacity: opacityController.drive(CurveTween(curve: Curves.easeOut)),
+                          opacity: opacityController
+                              .drive(CurveTween(curve: Curves.easeOut)),
                           child: Image.asset(
                             "assets/logo/htl.png",
                             height: 85,
@@ -85,7 +100,7 @@ AudioCache audioCache = AudioCache();
                         height: 80,
                       ),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {_startGame();},
                         child: Container(
                           child: Center(
                               child: Text(
@@ -113,7 +128,9 @@ AudioCache audioCache = AudioCache();
                         height: 10,
                       ),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          _openKaindorfWebsite();
+                        },
                         child: Container(
                           child: Center(
                               child: Text(
