@@ -16,14 +16,22 @@ class Game extends StatefulWidget {
 }
 
 class _GameState extends State<Game> {
+  List<Question> questions;
   Question question;
   QuestionAnswers correctAnswer;
 
+  static int answeredQuestions;
+
   @override
   void initState() {
-    question = Questions.questions[widget.answeredQuestions];
+
+    questions = Questions.getQuestions();
+    question = questions[widget.answeredQuestions];
     correctAnswer = question.answers[question.correctAnswer];
     question.answers.shuffle();
+
+    answeredQuestions = widget.answeredQuestions;
+
     super.initState();
   }
 
@@ -82,7 +90,7 @@ class _GameState extends State<Game> {
                                           height: 74,
                                         ),
                                         new Text(
-                                          "Richtig!",
+                                          wasAnswerCorrect ? "Richtig!" : "Falsch!",
                                           style: TextStyle(
                                             fontFamily: "Brandon Text",
                                             fontWeight: FontWeight.w700,
@@ -122,7 +130,7 @@ class _GameState extends State<Game> {
                                                   nextView(wasAnswerCorrect);
                                                 },
                                                 child: Text(
-                                                  "Weiter",
+                                                  answeredQuestions <= 3 ? "Weiter" : "Zum Ergebnis",
                                                   style: TextStyle(
                                                     fontFamily:
                                                         "Helvetica Neue",
@@ -137,7 +145,7 @@ class _GameState extends State<Game> {
                                           height: 42.00,
                                           width: 290.00,
                                           decoration: BoxDecoration(
-                                            color: Color(0xff66bb00),
+                                            color: wasAnswerCorrect ? Color(0xffa7d22a) : Color(0xffE5001B),
                                             border: Border.all(
                                               width: 1.00,
                                               color: Color(0xffffffff),
@@ -151,7 +159,7 @@ class _GameState extends State<Game> {
                                     height: 230.00,
                                     width: 356.00,
                                     decoration: BoxDecoration(
-                                      color: Color(0xffa7d22a),
+                                      color: wasAnswerCorrect ? Color(0xff66bb00) : Color(0xffCC0000),
                                       borderRadius:
                                           BorderRadius.circular(15.00),
                                     )),
@@ -160,7 +168,7 @@ class _GameState extends State<Game> {
                                   child: Container(
                                     margin: EdgeInsets.only(top: 40),
                                     child: Image.asset(
-                                      "assets/alert/correct.png",
+                                      wasAnswerCorrect ? "assets/alert/correct.png" : "assets/alert/incorrect.png",
                                       width: 100,
                                       height: 100,
                                     ),
@@ -301,7 +309,7 @@ class _GameState extends State<Game> {
                               "Frage " +
                                   (widget.answeredQuestions + 1).toString() +
                                   "/" +
-                                  Questions.questions.length.toString(),
+                                  questions.length.toString(),
                               style: TextStyle(color: Colors.white),
                             ),
                             Padding(
