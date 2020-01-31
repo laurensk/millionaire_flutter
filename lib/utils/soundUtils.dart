@@ -3,12 +3,10 @@ import 'package:audioplayers/audioplayers.dart';
 
 class SoundUtils {
 
-  static void playSound(String sound) {
+  static AudioPlayer advancedPlayer;
 
-    AudioCache audioCache = AudioCache();
-    AudioPlayer advancedPlayer = AudioPlayer();
-    audioCache.play(sound);
-
+  static void playSound(String sound) async {
+    advancedPlayer = await AudioCache().play(sound);
   }
 
 

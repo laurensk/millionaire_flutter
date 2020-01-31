@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:millionaire/game.dart';
+import 'package:millionaire/utils/soundUtils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Results extends StatefulWidget {
@@ -18,6 +19,9 @@ class _ResultsState extends State<Results> {
   @override
   void initState() {
     correctQuestions = widget.correctQuestions;
+
+    SoundUtils.playSound(Sounds.result);
+
     super.initState();
   }
 
@@ -37,6 +41,7 @@ class _ResultsState extends State<Results> {
             builder: (context) => Game(
                   answeredQuestions: 0,
                   correctQuestions: 0,
+                  resetJoker: true,
                 )));
   }
 
@@ -149,7 +154,7 @@ class _ResultsState extends State<Results> {
             child: Center(
               child: Container(
                 child: Padding(
-                  padding: const EdgeInsets.all(36.0),
+                  padding: const EdgeInsets.only(top: 20, left: 36, right: 36),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,

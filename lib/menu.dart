@@ -44,7 +44,7 @@ class _MenuState extends State<Menu> with TickerProviderStateMixin {
   }
 
   void _startGame() {
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Game(answeredQuestions: 0, correctQuestions: 0,)));
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Game(answeredQuestions: 0, correctQuestions: 0, resetJoker: false,)));
   }
 
   @override
@@ -62,9 +62,9 @@ class _MenuState extends State<Menu> with TickerProviderStateMixin {
           ),
           Center(
             child: Center(
-              child: Container(
+              child: SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.all(36.0),
+                  padding: const EdgeInsets.only(top: 20, left: 36, right: 36),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -77,7 +77,7 @@ class _MenuState extends State<Menu> with TickerProviderStateMixin {
                             height: 85,
                           )),
                       SizedBox(
-                        height: 80,
+                        height: 40,
                       ),
                       RotationTransition(
                           turns: Tween(begin: 0.5, end: 0.0).animate(
@@ -92,12 +92,12 @@ class _MenuState extends State<Menu> with TickerProviderStateMixin {
                         height: 15,
                       ),
                       Text(
-                        "Herzlich willkommen beim Tag der offenen Tür\nder HTBLA Kaindorf! Testen Sie in dieser App Ihr\nWissen über unsere Schule.",
+                        "Herzlich willkommen beim Tag der offenen Tür der HTBLA Kaindorf! Testen Sie in dieser App Ihr Wissen über unsere Schule.",
                         style: TextStyle(color: Colors.white),
                         textAlign: TextAlign.center,
                       ),
                       SizedBox(
-                        height: 80,
+                        height: 40,
                       ),
                       GestureDetector(
                         onTap: () {_startGame();},
