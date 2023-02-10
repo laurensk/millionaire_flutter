@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:millionaire/data/jokers.dart';
 import 'package:millionaire/data/quetions.dart';
@@ -87,13 +86,13 @@ class _GameState extends State<Game> with TickerProviderStateMixin {
                     correctQuestions: wasAnswerCorrect
                         ? widget.correctQuestions + 1
                         : widget.correctQuestions,
-                        resetJoker: false,
+                    resetJoker: false,
                   )));
     }
   }
 
   void jokerSelected(int id) {
-    if(Jokers.jokers[id].id == 0) {
+    if (Jokers.jokers[id].id == 0) {
       fiftyFiftyJoker();
     } else if (Jokers.jokers[id].id == 1) {
       audienceJoker();
@@ -103,43 +102,61 @@ class _GameState extends State<Game> with TickerProviderStateMixin {
   }
 
   void jokerAlreadyUsed(int id) {
-    AlertUtils.showAlert(context, "Bereits eingesetzt", "Dieser Joker wurde bereits eingesetzt\nund ist nicht mehr verfügbar.", "assets/alert/incorrect.png", "Schließen", Color(0xffBE0001), Color(0xffD22A2B));
+    AlertUtils.showAlert(
+        context,
+        "Bereits eingesetzt",
+        "Dieser Joker wurde bereits eingesetzt\nund ist nicht mehr verfügbar.",
+        "assets/alert/incorrect.png",
+        "Schließen",
+        Color(0xffBE0001),
+        Color(0xffD22A2B));
   }
 
   void audienceJoker() {
     SoundUtils.playSound(Sounds.audiencePhone);
-    AlertUtils.showAlert(context, "Publikumsjoker", "Frage jemanden um dich,\num die Antwort zu erfahren.", "assets/logo/MLogo_HTL.png", "Erledigt", Color(0xffD37203), Color(0xffFD9014));
+    AlertUtils.showAlert(
+        context,
+        "Publikumsjoker",
+        "Frage jemanden um dich,\num die Antwort zu erfahren.",
+        "assets/logo/MLogo_HTL.png",
+        "Erledigt",
+        Color(0xffD37203),
+        Color(0xffFD9014));
   }
 
   void telephoneJoker() {
     SoundUtils.playSound(Sounds.audiencePhone);
-    AlertUtils.showAlert(context, "Telefonjoker", "Frage jemanden um dich,\num die Antwort zu erfahren.", "assets/logo/MLogo_HTL.png", "Erledigt", Color(0xffD37203), Color(0xffFD9014));
+    AlertUtils.showAlert(
+        context,
+        "Telefonjoker",
+        "Frage jemanden um dich,\num die Antwort zu erfahren.",
+        "assets/logo/MLogo_HTL.png",
+        "Erledigt",
+        Color(0xffD37203),
+        Color(0xffFD9014));
   }
 
   void fiftyFiftyJoker() {
-
     _random = Random();
 
     SoundUtils.playSound(Sounds.fiftyFifty);
 
     int correctAnswerId;
 
-
-
-    for(int i = 0; i < question.answers.length; i++) {
-
+    for (int i = 0; i < question.answers.length; i++) {
       if (question.answers[i].id == correctAnswer.id) {
         correctAnswerId = i;
       }
-
     }
 
-    print("correctAnswerId: "+ correctAnswerId.toString());
+    print("correctAnswerId: " + correctAnswerId.toString());
 
     var firstNumberToHide = 0 + _random.nextInt(3 - 0);
     var secondNumberToHide = 0 + _random.nextInt(3 - 0);
 
-    while (firstNumberToHide == correctAnswerId || secondNumberToHide == correctAnswerId || firstNumberToHide == secondNumberToHide) {
+    while (firstNumberToHide == correctAnswerId ||
+        secondNumberToHide == correctAnswerId ||
+        firstNumberToHide == secondNumberToHide) {
       firstNumberToHide = 0 + _random.nextInt(3 - 0);
       secondNumberToHide = 0 + _random.nextInt(3 - 0);
     }
@@ -167,13 +184,10 @@ class _GameState extends State<Game> with TickerProviderStateMixin {
 
     print(hideMap.toString());
 
-
     setState(() {});
-
   }
 
   Widget joker(int id) {
-
     return GestureDetector(
       onTap: () {
         if (Jokers.jokers[id].wasActivated) {
@@ -186,19 +200,19 @@ class _GameState extends State<Game> with TickerProviderStateMixin {
       },
       child: Opacity(
         child: Image.asset(
-        "assets/joker/${id+1}.png",
-        width: 57,
-        height: 35,
+          "assets/joker/${id + 1}.png",
+          width: 57,
+          height: 35,
+        ),
+        opacity: Jokers.jokers[id].wasActivated ? 0.3 : 1.0,
       ),
-      opacity: Jokers.jokers[id].wasActivated ? 0.3 : 1.0,
-      ),
-      
     );
   }
 
   void showAnswerAlert(bool wasAnswerCorrect) {
-
-    wasAnswerCorrect ? SoundUtils.playSound(Sounds.correct) : SoundUtils.playSound(Sounds.incorrect);
+    wasAnswerCorrect
+        ? SoundUtils.playSound(Sounds.correct)
+        : SoundUtils.playSound(Sounds.incorrect);
 
     showDialog(
         context: context,
@@ -216,7 +230,8 @@ class _GameState extends State<Game> with TickerProviderStateMixin {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Stack(
-                              overflow: Overflow.visible,
+                              clipBehavior: Clip.none,
+                              // overflow: Overflow.visible,
                               alignment: AlignmentDirectional.topCenter,
                               children: <Widget>[
                                 Container(
@@ -345,57 +360,57 @@ class _GameState extends State<Game> with TickerProviderStateMixin {
   Widget answerBox(QuestionAnswers questionAnswer, String answerLabel, int id) {
     return AnimatedOpacity(
       child: GestureDetector(
-      onTap: () {
-        if(hideMap[id] != true) {
-          answerSelected(questionAnswer.id);
-        }
-      },
-      child: Container(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(left: 10),
-            ),
-            Text(
-              answerLabel,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: "Helvetica Neue",
-                fontWeight: FontWeight.w500,
-                fontSize: 23,
-                color: Color(0xfffff500),
+        onTap: () {
+          if (hideMap[id] != true) {
+            answerSelected(questionAnswer.id);
+          }
+        },
+        child: Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(left: 10),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 10),
-            ),
-            Text(
-              questionAnswer.answer,
-              style: TextStyle(
-                fontFamily: "Helvetica Neue",
-                fontWeight: FontWeight.w700,
-                fontSize: 16,
-                color: Color(0xffffffff),
+              Text(
+                answerLabel,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: "Helvetica Neue",
+                  fontWeight: FontWeight.w500,
+                  fontSize: 23,
+                  color: Color(0xfffff500),
+                ),
               ),
-            )
-          ],
-        ),
-        height: 42.00,
-        width: 320.00,
-        decoration: BoxDecoration(
-          color: Color(0xfffc9115),
-          border: Border.all(
-            width: 1.00,
-            color: Color(0xffffffff),
+              Padding(
+                padding: EdgeInsets.only(left: 10),
+              ),
+              Text(
+                questionAnswer.answer,
+                style: TextStyle(
+                  fontFamily: "Helvetica Neue",
+                  fontWeight: FontWeight.w700,
+                  fontSize: 16,
+                  color: Color(0xffffffff),
+                ),
+              )
+            ],
           ),
-          borderRadius: BorderRadius.circular(8.00),
+          height: 42.00,
+          width: 320.00,
+          decoration: BoxDecoration(
+            color: Color(0xfffc9115),
+            border: Border.all(
+              width: 1.00,
+              color: Color(0xffffffff),
+            ),
+            borderRadius: BorderRadius.circular(8.00),
+          ),
         ),
       ),
-    ),
-    opacity: hideMap[id] ? 0.3 : 1.0,
-    duration: Duration(seconds: 1),
+      opacity: hideMap[id] ? 0.3 : 1.0,
+      duration: Duration(seconds: 1),
     );
   }
 
@@ -404,113 +419,112 @@ class _GameState extends State<Game> with TickerProviderStateMixin {
     return Scaffold(
       body: SingleChildScrollView(
         child: Stack(
-        children: <Widget>[
-          Center(
-            child: Image.asset(
-              'assets/background.png',
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              fit: BoxFit.fill,
+          children: <Widget>[
+            Center(
+              child: Image.asset(
+                'assets/background.png',
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                fit: BoxFit.fill,
+              ),
             ),
-          ),
-          Center(
-            child: Center(
-              child: Container(
-                child: Padding(
-                  padding: const EdgeInsets.all(36.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      ScaleTransition(
-                        scale: animation,
-                        child: Image.asset(
-                        "assets/logo/MLogo_HTL.png",
-                        width: 133,
-                        height: 133,
-                      ),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          joker(0),
-                          Padding(
-                            padding: EdgeInsets.only(left: 18),
+            Center(
+              child: Center(
+                child: Container(
+                  child: Padding(
+                    padding: const EdgeInsets.all(36.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        ScaleTransition(
+                          scale: animation,
+                          child: Image.asset(
+                            "assets/logo/MLogo_HTL.png",
+                            width: 133,
+                            height: 133,
                           ),
-                          joker(1),
-                          Padding(
-                            padding: EdgeInsets.only(right: 18),
-                          ),
-                          joker(2),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(20),
-                        child: Column(
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
-                            Text(
-                              "Frage " +
-                                  (widget.answeredQuestions + 1).toString() +
-                                  "/" +
-                                  questions.length.toString(),
-                              style: TextStyle(color: Colors.white),
-                            ),
+                            joker(0),
                             Padding(
-                              padding: EdgeInsets.only(top: 10),
+                              padding: EdgeInsets.only(left: 18),
                             ),
-                            Text(
-                              question.question,
-                              style:
-                                  TextStyle(fontSize: 19, color: Colors.white),
-                            )
+                            joker(1),
+                            Padding(
+                              padding: EdgeInsets.only(right: 18),
+                            ),
+                            joker(2),
                           ],
                         ),
-                        height: 169.00,
-                        width: 310.00,
-                        decoration: BoxDecoration(
-                          color: Color(0xff2c016c),
-                          border: Border.all(
-                            width: 2.00,
-                            color: Color(0xffffffff),
-                          ),
-                          borderRadius: BorderRadius.circular(10.00),
+                        SizedBox(
+                          height: 10,
                         ),
-                      ),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      answerBox(question.answers[0], "A:", 0),
-                      SizedBox(
-                        height: 14,
-                      ),
-                      answerBox(question.answers[1], "B:", 1),
-                      SizedBox(
-                        height: 14,
-                      ),
-                      answerBox(question.answers[2], "C:", 2),
-                      SizedBox(
-                        height: 14,
-                      ),
-                      answerBox(question.answers[3], "D:", 3),
-                    ],
+                        Container(
+                          padding: const EdgeInsets.all(20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                "Frage " +
+                                    (widget.answeredQuestions + 1).toString() +
+                                    "/" +
+                                    questions.length.toString(),
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(top: 10),
+                              ),
+                              Text(
+                                question.question,
+                                style: TextStyle(
+                                    fontSize: 19, color: Colors.white),
+                              )
+                            ],
+                          ),
+                          height: 169.00,
+                          width: 310.00,
+                          decoration: BoxDecoration(
+                            color: Color(0xff2c016c),
+                            border: Border.all(
+                              width: 2.00,
+                              color: Color(0xffffffff),
+                            ),
+                            borderRadius: BorderRadius.circular(10.00),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        answerBox(question.answers[0], "A:", 0),
+                        SizedBox(
+                          height: 14,
+                        ),
+                        answerBox(question.answers[1], "B:", 1),
+                        SizedBox(
+                          height: 14,
+                        ),
+                        answerBox(question.answers[2], "C:", 2),
+                        SizedBox(
+                          height: 14,
+                        ),
+                        answerBox(question.answers[3], "D:", 3),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
-      ),
-      
     );
   }
 }

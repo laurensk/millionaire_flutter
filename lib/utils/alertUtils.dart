@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 
 class AlertUtils {
-
-  static void showAlert(BuildContext context, String title, String text, String imageAsset, String closeButtonText, Color backgroundColor, Color buttonColor) {
+  static void showAlert(
+      BuildContext context,
+      String title,
+      String text,
+      String imageAsset,
+      String closeButtonText,
+      Color backgroundColor,
+      Color buttonColor) {
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -19,7 +25,8 @@ class AlertUtils {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Stack(
-                              overflow: Overflow.visible,
+                              clipBehavior: Clip.none,
+                              // overflow: Overflow.visible,
                               alignment: AlignmentDirectional.topCenter,
                               children: <Widget>[
                                 Container(
@@ -68,7 +75,7 @@ class AlertUtils {
                                                   CrossAxisAlignment.center,
                                               children: <Widget>[
                                                 Text(
-                                                closeButtonText,
+                                                  closeButtonText,
                                                   style: TextStyle(
                                                     fontFamily:
                                                         "Helvetica Neue",
@@ -121,6 +128,4 @@ class AlertUtils {
                   )));
         });
   }
-
-
 }

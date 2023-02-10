@@ -51,7 +51,8 @@ class _ResultsState extends State<Results> {
 
     return Column(children: <Widget>[
       Stack(
-          overflow: Overflow.visible,
+          clipBehavior: Clip.none,
+          // overflow: Overflow.visible,
           alignment: AlignmentDirectional.topCenter,
           children: <Widget>[
             Container(
@@ -172,7 +173,9 @@ class _ResultsState extends State<Results> {
                         height: 50,
                       ),
                       GestureDetector(
-                        onTap: () { _startGame(); },
+                        onTap: () {
+                          _startGame();
+                        },
                         child: Container(
                           child: Center(
                               child: Text(
@@ -200,7 +203,9 @@ class _ResultsState extends State<Results> {
                         height: 10,
                       ),
                       GestureDetector(
-                        onTap: () { _openKaindorfWebsite(); },
+                        onTap: () {
+                          _openKaindorfWebsite();
+                        },
                         child: Container(
                           child: Center(
                               child: Text(

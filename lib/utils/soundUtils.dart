@@ -1,16 +1,21 @@
+import 'dart:io';
+
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 class SoundUtils {
-
   static AudioPlayer advancedPlayer;
 
   static void playSound(String sound) async {
     advancedPlayer = await AudioCache().play(sound);
+
+    if (Platform.isIOS) {
+      advancedPlayer.monitorNotificationStateChanges(audioPlayerHandler);
+    }
   }
-
-
 }
+
+void audioPlayerHandler(AudioPlayerState value) => null;
 
 class Sounds {
   static String audiencePhone = "sounds/audiencePhone.mp3";
